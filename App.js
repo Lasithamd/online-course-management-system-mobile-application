@@ -17,7 +17,8 @@ import {
   View
 } from 'react-native';
 import { Button } from 'react-native-paper';
-
+import Home from './src/screens/Home/Home'
+import BottomNav from './src/components/BottomNav';
 
 function App() {
   const onPressLearnMore= () =>{
@@ -28,6 +29,8 @@ function App() {
 
   return (
     <SafeAreaView >
+      <Home/>
+      <BottomNav/>
       <Text>Hii</Text>
       <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
     Press me
