@@ -18,7 +18,9 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import Home from './src/screens/Home/Home'
-import BottomNav from './src/components/BottomNav';
+// import BottomNav from './src/components/BottomNav';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 
 function App() {
   const onPressLearnMore= () =>{
@@ -26,15 +28,16 @@ function App() {
     
 
   }
-
+ 
+  const Stack = createStackNavigator();
   return (
     <SafeAreaView >
-      <Home/>
-      <BottomNav/>
-      <Text>Hii</Text>
-      <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
-    Press me
-  </Button>
+     <NavigationContainer>
+     <Stack.Screen name="Home" component={Home} />
+      {/* <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Settings" component={Settings} /> */}
+    </NavigationContainer>
     </SafeAreaView>
   );
 }
