@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -18,47 +18,33 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import Home from './src/screens/Home/Home'
+import Login from './src/screens/Login/Login';
 // import BottomNav from './src/components/BottomNav';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 function App() {
-  const onPressLearnMore= () =>{
-    console.log('sdsdds');
-    
+  // const [isLoading, setIsLoading] = useState(true);
+  // const Stack = createStackNavigator();
 
-  }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+     
+  //     setTimeout(() => {
+  //       setIsLoading(false)
+  //     }, 3000)
+  //   };
+
+  //   fetchData();
+  // }, []);
  
-  const Stack = createStackNavigator();
-  return (
-    <SafeAreaView >
-     <NavigationContainer>
-     <Stack.Screen name="Home" component={Home} />
-      {/* <Stack.Screen name="Notifications" component={Notifications} />
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="Settings" component={Settings} /> */}
-    </NavigationContainer>
-    </SafeAreaView>
-  );
-}
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+  return (
+    <Login/>
+  )
+}
 
 export default App;
