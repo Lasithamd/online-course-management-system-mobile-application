@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
-// import axiosInstance  from '../../services/AxiosOrder';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+
 import {
     View, TextInput,
     KeyboardAvoidingView,
@@ -11,14 +12,11 @@ import {
     Button,
     Keyboard,
   } from 'react-native';
-function Login() {
+function Login({ navigation }) {
 
   const [credential, setCredential]= useState('');
     function onLogin() {
-    // const data = {
-    //     email: email,
-    //     password: password
-    // };
+   
 
     const data = {
       email: 'chamikara12345@gmail.com',
@@ -27,6 +25,12 @@ function Login() {
   
   axios.post('http://student-api.acpt.lk/api/login', data)
       .then(response => {
+        const token = response.data.token;
+
+        // Store the token in AsyncStorage
+        AsyncStorage.setItem('userToken', token);
+       
+        navigation.navigate('Home');  
           console.log(response.data);
       })
       .catch(err => {
