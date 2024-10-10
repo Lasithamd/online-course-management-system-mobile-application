@@ -17,7 +17,8 @@ import {
   View
 } from 'react-native';
 import { Button } from 'react-native-paper';
-import Home from './src/screens/Home/Home'
+import Home from './src/screens/Home/Home'; 
+import Video from './src/screens/Video/Video'
 import Login from './src/screens/Login/Login';
 import Loading from './src/screens/Loading/Loading'
 // import BottomNav from './src/components/BottomNav';
@@ -48,7 +49,8 @@ function App() {
       <Stack.Navigator initialRouteName="Login">
         {/* Define screens for stack navigation */}
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="Video" component={Video} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   )
