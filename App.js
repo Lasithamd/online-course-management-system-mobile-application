@@ -24,6 +24,8 @@ import Loading from './src/screens/Loading/Loading'
 // import BottomNav from './src/components/BottomNav';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Course from './src/screens/Course/Course'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -50,8 +52,10 @@ function App() {
         {/* Define screens for stack navigation */}
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="Video" component={Video} options={{ headerShown: false }} />
+        <Stack.Screen name="Course" component={Course}  />
+        <Stack.Screen name="Video" component={Video}  />
       </Stack.Navigator>
+      
     </NavigationContainer>
   )
 }

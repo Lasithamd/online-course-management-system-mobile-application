@@ -5,7 +5,8 @@ import {
   Text, Image,
   TouchableOpacity,
 } from 'react-native';
-
+import Course from '../../screens/Course/Course';
+import { useNavigation } from '@react-navigation/native';
 const DATA = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -31,15 +32,18 @@ const DATA = [
     decription:"sdsdsdsdsd",
   },
 ];
+const onPressList=(id)=>{
+  navigation.navigate('Course');  
 
+}
 const Item = ({item, onPress, backgroundColor, textColor}) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, {backgroundColor}]}>
+  <TouchableOpacity onPress={(id)=>onPressList(item.id)} style={[styles.item, {backgroundColor}]}>
     <Text style={[styles.title, {color: textColor}]}>{item.title}</Text>
     <Text style={[styles.decription, {color: textColor}]}>{item.decription}</Text>
   </TouchableOpacity>
 );
 
-const ListItems = () => {
+const ListItems = ({navigation}) => {
   const [selectedId, setSelectedId] = useState();
 
   const renderItem = ({item}) => {
