@@ -28,20 +28,48 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Course from './src/screens/Course/Course'
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const Stack = createStackNavigator();
+  const [user, setUser] = useState(null); // To store the logged-in user's data
+  const [data, setData] = useState([]); // To store all the data fetched from the API
+  const [filteredData, setFilteredData] = useState([]); // To store data filtered for the logged-in user
 
   useEffect(() => {
+    // Fetch user data from AsyncStorage
+    const fetchUserData = async () => {
+        const userData = await AsyncStorage.getItem('userData');
+        setUser(JSON.parse(userData)); // Parse the JSON string into an object
+    };
+
+    fetchUserData();
+}, []);
+
+useEffect(() => {
+    // Fetch all data from the API
     const fetchData = async () => {
-     
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 3000)
+        const token = await AsyncStorage.getItem('userToken');
+        axios.get('http://student-api.acpt.lk/api/student/getAll', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(response => {
+                setData(response.data); // Store all data in the state
+            })
+            .catch(err => {
+                console.error(err);
+            });
     };
 
     fetchData();
-  }, []);
- 
+}, []);
+
+useEffect(() => {
+    // Filter data based on logged-in user
+    if (user && data.length > 0) {
+        const filtered = data.filter(item => item.userID === user.id); // Assuming each item has a `userID`
+        setFilteredData(filtered);
+    }
+}, [user, data]);
+
   if (isLoading) {
     return <Loading />;
   }

@@ -5,7 +5,6 @@ import {
   Text, Image,
   TouchableOpacity,
 } from 'react-native';
-import Course from '../../screens/Course/Course';
 import { useNavigation } from '@react-navigation/native';
 const DATA = [
   {

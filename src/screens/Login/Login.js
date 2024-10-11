@@ -15,34 +15,36 @@ import {
 function Login({ navigation }) {
 
   const [credential, setCredential] = useState('');
-  //     function onLogin() {
+   
+  function onLogin() {
+    const data = {
+        email: 'chamikara12345@gmail.com',
+        password: '12345'
+    };
 
+    axios.post('http://student-api.acpt.lk/api/login', data)
+        .then(async (response) => {
+            const token = response.data.token;
+            const user = response.data.user;
 
-  //     const data = {
-  //       email: 'chamikara12345@gmail.com',
-  //       password: '12345'
-  //   };
+            try {
+                // Store token and user data in AsyncStorage asynchronously
+                await AsyncStorage.setItem('userToken', token);
+                await AsyncStorage.setItem('userData', JSON.stringify(user));
 
-  //   axios.post('http://student-api.acpt.lk/api/login', data)
-  //       .then(response => {
-  //         const token = response.data.token;
+                // Navigate to the Home screen after saving the data
+                navigation.navigate('Home');
 
-  //         // Store the token in AsyncStorage
-  //         AsyncStorage.setItem('userToken', token);
-
-  //         navigation.navigate('Home');  
-  //           console.log(response.data);
-  //       })
-  //       .catch(err => {
-  //           console.error(err);
-  //       });
-
-  // }
-const onLogin= ()=>{
-  console.log('ssdsd');
-  
-  navigation.navigate('Home');  
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error saving data to AsyncStorage:', error);
+            }
+        })
+        .catch((err) => {
+            console.error('Login error:', err);
+        });
 }
+
   const [text, setText] = React.useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
