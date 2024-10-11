@@ -4,7 +4,7 @@ import { View, StyleSheet ,SafeAreaView, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ListItems from '../../components/ListItem/ListItems'
-import Video from '../Video/Video';
+import Videos from '../Video/Video';
 import MyAppBar from '../../components/MyAppBar';
 export default function Course({navigation}){
     const loadVideo= ()=>{
