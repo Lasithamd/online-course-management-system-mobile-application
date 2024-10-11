@@ -38,7 +38,11 @@ function Login({ navigation }) {
   //       });
 
   // }
-
+const onLogin= ()=>{
+  console.log('ssdsd');
+  
+  navigation.navigate('Home');  
+}
   const [text, setText] = React.useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,10 +59,10 @@ function Login({ navigation }) {
           <TextInput label="Email" onChangeText={text => setEmail(text)} style={styles.textInput} mode="outlined" />
           <TextInput label="Password" onChangeText={text => setPassword(text)} style={styles.textInput} mode="outlined" />
           <View style={styles.btnContainer}>
-            <Button style={styles.btn} mode="contained" onPress={() => console.log('Pressed')} buttonColor={'#f39c12'}>
+            <Button style={styles.btn} mode="contained" onPress={onLogin} buttonColor={'#f39c12'}>
               Login
             </Button>
-            <Button onPress={() => onLogin()} />
+            
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -76,6 +80,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
 
   },
+  textInput:{
+    borderColor:"#f39c12"
+  },
+ 
   inner: {
     padding: 24,
 

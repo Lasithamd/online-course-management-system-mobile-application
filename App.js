@@ -47,6 +47,7 @@ function App() {
   }
 
   return (
+    
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         {/* Define screens for stack navigation */}
