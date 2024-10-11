@@ -5,13 +5,15 @@ import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ListItems from '../../components/ListItem/ListItems'
+import Course from '../Course/Course';
 import { blue100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
-import BtnNavigation from '../../components/Navigation/BtnNavigation'
 import MyAppBar from '../../components/MyAppBar';
 
 function Home({ navigation }) {
-
+const loadVideo= ()=>{
+  navigation.navigate('Course')
+}
   const [data, setData] = useState('');
   const [selectedId, setSelectedId] = useState();
 
@@ -52,10 +54,10 @@ function Home({ navigation }) {
 
       </View>
       <Card>
-        <Card.Title title="Card Title" subtitle="Card Subtitle"  right={(props) =>   <Button>View More </Button>} />
+        <Card.Title title="Card Title" subtitle="Card Subtitle"  right={(props) =>   <Button onPress={()=>loadVideo()}>View More </Button>} />
       </Card>
      
-      <BtnNavigation/>
+   
     </View>
   );
 }
