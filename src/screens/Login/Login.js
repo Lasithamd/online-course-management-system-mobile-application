@@ -18,11 +18,11 @@ function Login({ navigation }) {
    
   function onLogin() {
     const data = {
-        email: 'chamikara12345@gmail.com',
-        password: '12345'
+        email: 'madhura@gmail.com',
+        password: '244411'
     };
 
-    axios.post('http://student-api.acpt.lk/api/login', data)
+    axios.post('http://192.168.8.104:3000/user/login', data)
         .then(async (response) => {
             const token = response.data.token;
             const user = response.data.user;

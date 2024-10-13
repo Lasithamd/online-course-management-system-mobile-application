@@ -28,7 +28,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Course from './src/screens/Course/Course'
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const Stack = createStackNavigator();
   const [user, setUser] = useState(null); // To store the logged-in user's data
   const [data, setData] = useState([]); // To store all the data fetched from the API
@@ -69,6 +69,15 @@ useEffect(() => {
         setFilteredData(filtered);
     }
 }, [user, data]);
+useEffect(() => {
+  // Simulate a delay for loading screen (e.g., 3 seconds)
+  const timeout = setTimeout(() => {
+    setIsLoading(false);
+  }, 3000); // 3000 ms = 3 seconds
+
+  // Cleanup the timeout if the component is unmounted before the delay completes
+  return () => clearTimeout(timeout);
+}, []);
 
   if (isLoading) {
     return <Loading />;

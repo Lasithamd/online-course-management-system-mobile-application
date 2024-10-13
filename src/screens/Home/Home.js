@@ -3,10 +3,12 @@ import { Card, Text, Button } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyAppBar from '../../components/MyAppBar';
-
+import axios from 'axios';
 function Home({ navigation }) {
   const [user, setUser] = useState(null); 
-  
+  const [name	, setName] = useState(null); 
+  const [	description, setDescription] = useState(null); 
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -20,6 +22,30 @@ function Home({ navigation }) {
     };
 
     fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    axios.post('http://192.168.8.104:3000/user/login', data)
+        .then(async (response) => {
+            const token = response.data.token;
+            const user = response.data.user;
+
+            try {
+                // Store token and user data in AsyncStorage asynchronously
+                await AsyncStorage.setItem('userToken', token);
+                await AsyncStorage.setItem('userData', JSON.stringify(user));
+
+                // Navigate to the Home screen after saving the data
+                navigation.navigate('Home');
+
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error saving data to AsyncStorage:', error);
+            }
+        })
+        .catch((err) => {
+            console.error('Login error:', err);
+        });
   }, []);
 
   const loadVideo = () => {
