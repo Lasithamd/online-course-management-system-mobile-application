@@ -1,12 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Avatar, Text, Button, IconButton } from 'react-native-paper'
-import { View, StyleSheet ,SafeAreaView, ScrollView} from 'react-native';
+import { View, StyleSheet ,SafeAreaView, ScrollView,FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ListItems from '../../components/ListItem/ListItems'
 import Videos from '../Video/Video';
 import MyAppBar from '../../components/MyAppBar';
-export default function Course({navigation}){
+export default function Course({navigation,route}){
+  const { courseID } = route.params;
+  const [data, setData] = useState(null); // To store course data
+
+  useEffect(() => {
+    const fetchStudentCourse = async () => {
+      try {
+     
+        
+        const token = await AsyncStorage.getItem('userToken');
+        if (!token) {
+          throw new Error('Token not found');
+        }
+        console.log('Token retrieved:', token); // Log the token to verify
+  
+        const response = await axios.get(`http://192.168.8.102:3000/video/${courseID}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        setData(response.data);
+        console.log(response.data)
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchStudentCourse();
+  }, [courseID]);
+
     const loadVideo= ()=>{
         navigation.navigate('Video')
       }
@@ -19,30 +49,17 @@ export default function Course({navigation}){
                 <Text style={styles.titleconent2}>Description</Text>
               </View>
               <View style={styles.subtitlearea}><Text>Video List</Text></View>
-              <View>
-        
-              </View>
-              <SafeAreaView>
-              <ScrollView>
-              <Card style={styles.videocard}>
-              <Card.Cover source={{ uri: 'https://img.freepik.com/premium-psd/modern-youtube-thumbnail-design_892970-6.jpg' }} />
-                <Card.Title title="Card Title" right={(props) =><Button onPress={()=>loadVideo()}>Play Now  </Button>} />
+              <FlatList
+                  data={data}
+                  keyExtractor={(item) => item.id.toString()} // Assuming each course has a unique 'id'
+                  renderItem={({ item }) => (
+                  <Card style={styles.videocard}>
+              <Card.Cover source={{ uri: 'http://192.168.8.102:3000'+item.thumbnails_path }} />
+                <Card.Title title={item.name} subtitle={item.description}  right={(props) =><Button onPress={()=>loadVideo()}>Play Now  </Button>} />
               </Card>
-
-              <Card style={styles.videocard}>
-              <Card.Cover source={{ uri: 'https://img.freepik.com/premium-psd/modern-youtube-thumbnail-design_892970-6.jpg' }} />
-                <Card.Title title="Card Title" right={(props) =><Button onPress={()=>loadVideo()}>Play Now </Button>} />
-              </Card>
-
-              <Card style={styles.videocard}>
-              <Card.Cover source={{ uri: 'https://img.freepik.com/premium-psd/modern-youtube-thumbnail-design_892970-6.jpg' }} />
-                <Card.Title title="Card Title" right={(props) =><Button onPress={()=>loadVideo()}>Play Now </Button>} />
-              </Card>
-              <Card style={styles.videocard}>
-              <Card.Cover source={{ uri: 'https://img.freepik.com/premium-psd/modern-youtube-thumbnail-design_892970-6.jpg' }} />
-                <Card.Title title="Card Title" right={(props) =><Button onPress={()=>loadVideo()}>Play Now </Button>} />
-              </Card></ScrollView>
-              </SafeAreaView>
+                  )}
+              />
+              
              
             </View>
           );
