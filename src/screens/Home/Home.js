@@ -1,56 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Text, Button } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator,FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyAppBar from '../../components/MyAppBar';
 import axios from 'axios';
-function Home({ navigation }) {
-  const [user, setUser] = useState(null); 
-  const [name	, setName] = useState(null); 
-  const [	description, setDescription] = useState(null); 
 
+function Home({ navigation, route }) {
+  const [user, setUser] = useState(null); 
+  const [data, setData] = useState(null); // To store course data
+  const [loading, setLoading] = useState(true); // To handle loading state
+  const [error, setError] = useState(null); // To handle errors
+  const [id, setId] = useState(null); // Initialize id as null
+
+  // Fetch user data from AsyncStorage
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userData = await AsyncStorage.getItem('userData');
         if (userData !== null) {
-          setUser(JSON.parse(userData)); // Parse the JSON string into an object
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
         }
       } catch (err) {
         console.error("Error fetching user data: ", err);
       }
     };
-
+    
     fetchUserData();
   }, []);
 
+  // Set the ID once the user data is loaded
   useEffect(() => {
-    axios.post('http://192.168.8.104:3000/user/login', data)
-        .then(async (response) => {
-            const token = response.data.token;
-            const user = response.data.user;
+    if (user) {
+      setId(user.id); // Ensure user object exists before accessing id
+    }
+  }, [user]);
 
-            try {
-                // Store token and user data in AsyncStorage asynchronously
-                await AsyncStorage.setItem('userToken', token);
-                await AsyncStorage.setItem('userData', JSON.stringify(user));
-
-                // Navigate to the Home screen after saving the data
-                navigation.navigate('Home');
-
-                console.log(response.data);
-            } catch (error) {
-                console.error('Error saving data to AsyncStorage:', error);
-            }
-        })
-        .catch((err) => {
-            console.error('Login error:', err);
+  // Fetch student course data when id is available
+  useEffect(() => {
+    const fetchStudentCourse = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        if (!token) {
+          throw new Error('Token not found');
+        }
+        console.log('Token retrieved:', token); // Log the token to verify
+  
+        const response = await axios.get(`http://192.168.8.102:3000/student-course/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-  }, []);
+        setData(response.data);
+        console.log(response.data)
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchStudentCourse();
+  }, [id]);
+  
 
-  const loadVideo = () => {
-    navigation.navigate('Course');
+  const loadVideo = (courseID) => {
+    console.log(courseID);
+    
+    navigation.navigate('Course', { courseID });
   };
+
+  // // Show loading indicator while fetching data
+  // if (loading) {
+  //   return <ActivityIndicator size="large" color="#0000ff" />;
+  // }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
 
   return (
     <View style={styles.container}>
@@ -60,13 +85,20 @@ function Home({ navigation }) {
         <Text style={styles.titleconent2}>Email: {user ? user.email : 'Loading...'}</Text>
       </View>
       <View style={styles.subtitlearea}><Text>Course List</Text></View>
-      <Card>
-        <Card.Title 
-          title="Card Title" 
-          subtitle="Card Subtitle"  
-          right={(props) => <Button onPress={() => loadVideo()}>View More</Button>} 
-        />
-      </Card>
+
+      
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id.toString()} // Assuming each course has a unique 'id'
+        renderItem={({ item }) => (
+          <Card>
+          <Card.Title 
+            title={item.name || "Course Title"} 
+            subtitle={item.description || "Course Description"}  
+            right={(props) => <Button onPress={() => loadVideo(item.id)}>View More</Button>} 
+          />
+        </Card>
+        )}  />
     </View>
   );
 }
