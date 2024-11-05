@@ -22,17 +22,17 @@ function Login({ navigation }) {
         app_password: '478569'
     };
 
-    axios.post('http://192.168.8.102:3000/user/mobile/login', data)
+    axios.post('http://192.168.8.101:3000/user/mobile/login', data)
         .then(async (response) => {
             const token = response.data.token;
             const user = response.data.user;
 
             try {
-                // Store token and user data in AsyncStorage asynchronously
+             
                 await AsyncStorage.setItem('userToken', token);
                 await AsyncStorage.setItem('userData', JSON.stringify(user));
 
-                // Navigate to the Home screen after saving the data
+               
                 navigation.navigate('Home');
 
                 console.log(response.data);

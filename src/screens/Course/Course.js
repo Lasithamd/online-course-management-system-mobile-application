@@ -4,7 +4,7 @@ import { View, StyleSheet ,SafeAreaView, ScrollView,FlatList} from 'react-native
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ListItems from '../../components/ListItem/ListItems'
-import Videos from '../Video/Video';
+import Videos from '../Video/Videos';
 import MyAppBar from '../../components/MyAppBar';
 export default function Course({navigation,route}){
   const { courseID } = route.params;
@@ -21,7 +21,7 @@ export default function Course({navigation,route}){
         }
         console.log('Token retrieved:', token); // Log the token to verify
   
-        const response = await axios.get(`http://192.168.8.102:3000/video/${courseID}`, {
+        const response = await axios.get(`http://192.168.8.101:3000/video/${courseID}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -37,11 +37,11 @@ export default function Course({navigation,route}){
     fetchStudentCourse();
   }, [courseID]);
 
-    const loadVideo= ()=>{
-        navigation.navigate('Video')
+    const loadVideo= (videoID)=>{
+        navigation.navigate('Video',{videoID})
       }
     return (
-
+      <ScrollView style={styles.safeAreaContainer}>
             <View style={styles.container}>
             
               <View style={styles.titlearea}>
@@ -49,23 +49,29 @@ export default function Course({navigation,route}){
                 <Text style={styles.titleconent2}>Description</Text>
               </View>
               <View style={styles.subtitlearea}><Text>Video List</Text></View>
-              <FlatList
+              
+              
+              <FlatList style={styles.fatlelist}
                   data={data}
                   keyExtractor={(item) => item.id.toString()} // Assuming each course has a unique 'id'
                   renderItem={({ item }) => (
                   <Card style={styles.videocard}>
-              <Card.Cover source={{ uri: 'http://192.168.8.102:3000'+item.thumbnails_path }} />
-                <Card.Title title={item.name} subtitle={item.description}  right={(props) =><Button onPress={()=>loadVideo()}>Play Now  </Button>} />
+              <Card.Cover source={{ uri: 'http://192.168.8.101:3000'+item.thumbnails_path }} />
+                <Card.Title title={item.name} subtitle={item.description}  right={(props) =><Button onPress={()=>loadVideo(item.id)}>Play Now  </Button>} />
               </Card>
                   )}
               />
-              
+                
+
              
-            </View>
+            </View></ScrollView>
           );
         }
     
         const styles = StyleSheet.create({
+          fatlelist:{
+            height:"100%"
+          },
           titlearea: {
             backgroundColor: "#3498db",
             paddingTop: 40,
@@ -74,6 +80,7 @@ export default function Course({navigation,route}){
             borderBottomRightRadius: 20,
         
           },
+          
           videocard:{
             padding:10,
           margin:1

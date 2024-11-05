@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import Home from './src/screens/Home/Home'; 
-import Video from './src/screens/Video/Video'
+import Videos from './src/screens/Video/Videoss'
 import Login from './src/screens/Login/Login';
 import Loading from './src/screens/Loading/Loading'
 // import BottomNav from './src/components/BottomNav';
@@ -91,7 +91,7 @@ useEffect(() => {
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Course" component={Course}  />
-        <Stack.Screen name="Video" component={Video}  />
+        <Stack.Screen name="Video" component={Videos}  />
       </Stack.Navigator>
       
     </NavigationContainer>

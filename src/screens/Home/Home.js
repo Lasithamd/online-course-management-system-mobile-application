@@ -46,7 +46,7 @@ function Home({ navigation, route }) {
         }
         console.log('Token retrieved:', token); // Log the token to verify
   
-        const response = await axios.get(`http://192.168.8.102:3000/student-course/${id}`, {
+        const response = await axios.get(`http://192.168.8.101:3000/student-course/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setData(response.data);
